@@ -28,7 +28,7 @@ sensor.set_pixformat(sensor.RGB565)
 # Load template.
 # Template should be a small (eg. 32x32 pixels) grayscale image.
 templates_u = ["/u.pgm", "/u2.pgm", "/u3.pgm"]
-templates_s = ["/s.pgm", "/s2.pgm", "/s3.pgm"]
+templates_s = ["/s.pgm", "/s2.pgm", "/s3.pgm", "/s4.pgm"]
 templates_h = ["/h.pgm", "/h2.pgm", "/h3.pgm"]
 
 pin5 = Pin('P5', Pin.OUT_PP, Pin.PULL_NONE)
@@ -62,19 +62,19 @@ while (True):
 
     for t in templates_u:
         template_u = image.Image(t)
-        if img.find_template(template_u, 0.60, step=4, search=SEARCH_EX) != None:
+        if img.find_template(template_u, 0.70, step=4, search=SEARCH_EX) != None:
             pin5.value(1)
             pin4.value(1)
             print("u")
     for t in templates_s:
         template_s = image.Image(t)
-        if img.find_template(template_s, 0.60, step=4, search=SEARCH_EX) != None:
+        if img.find_template(template_s, 0.70, step=4, search=SEARCH_EX) != None:
             pin5.value(1)
             pin4.value(0)
             print("s")
     for t in templates_h:
         template_h = image.Image(t)
-        if img.find_template(template_h, 0.60, step=4, search=SEARCH_EX) != None:
+        if img.find_template(template_h, 0.70, step=4, search=SEARCH_EX) != None:
             pin5.value(0)
             pin4.value(1)
-            print("")
+            print("h")

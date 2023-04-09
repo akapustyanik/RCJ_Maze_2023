@@ -18,14 +18,14 @@ sensor.reset()
 sensor.set_contrast(1)
 sensor.set_gainceiling(16)
 # Max resolution for template matching with SEARCH_EX is QQVGA
-sensor.set_framesize(sensor.QQVGA)
+sensor.set_framesize(sensor.HQQVGA)
 # You can set windowing to reduce the search image.
 #sensor.set_windowing(((640-80)//2, (480-60)//2, 80, 60))
 sensor.set_pixformat(sensor.RGB565)
 
 # Load template.
 # Template should be a small (eg. 32x32 pixels) grayscale image.
-templates = ["/u.pgm", "/u2.pgm", "/u3.pgm", "/s.pgm", "/s2.pgm", "/s3.pgm", "/h.pgm", "/h2.pgm", "/h3.pgm"] #保存多个模板
+templates = ["/u.pgm", "/u2.pgm", "/u3.pgm", "/s.pgm", "/s2.pgm", "/s3.pgm", "/s4.pgm", "/h.pgm", "/h2.pgm", "/h3.pgm"] #保存多个模板
 #加载模板图片
 
 clock = time.clock()
@@ -46,7 +46,7 @@ while (True):
     for t in templates:
         template = image.Image(t)
         #对每个模板遍历进行模板匹配
-        r = img.find_template(template, 0.60, step=4, search=SEARCH_EX) #, roi=(10, 0, 60, 60))
+        r = img.find_template(template, 0.7, step=4, search=SEARCH_EX) #, roi=(10, 0, 60, 60))
     #find_template(template, threshold, [roi, step, search]),threshold中
     #的0.7是相似度阈值,roi是进行匹配的区域（左上顶点为（10，0），长80宽60的矩形），
     #注意roi的大小要比模板图片大，比frambuffer小。

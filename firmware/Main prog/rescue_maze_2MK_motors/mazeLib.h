@@ -107,7 +107,7 @@ class MOTOR {
       //      Serial.print(" err ");
       //      Serial.println(_motorSpeed - _encSpeed);
       //      Serial.print("fixSpeed ");
-            Serial.println(_fixSpeed);
+      Serial.println(_fixSpeed);
       //      Serial.println(" ");
       analogWrite(_pin1, max(_fixSpeed, 0));
       analogWrite(_pin2, sgn(_fixSpeed) * min(_fixSpeed, 0));

@@ -25,6 +25,25 @@ MOTOR motorB(mB_IN1, mB_IN2, B, rpm, d, 3);
 MOTOR motorC(mC_IN1, mC_IN2, C, rpm, d, 3);
 MOTOR motorD(mD_IN1, mD_IN2, D, rpm, d, 3);
 
+void enc_A() {
+  motorA.writeEnc();
+}
+void enc_B() {
+  motorB.writeEnc();
+}
+void enc_C() {
+  motorC.writeEnc();
+}
+void enc_D() {
+  motorD.writeEnc();
+}
+
+void clearAllEnc() {
+  motorA.clear_enc();
+  motorB.clear_enc();
+  motorC.clear_enc();
+  motorD.clear_enc();
+}
 unsigned long mill_A = 0, mill_B = 0, mill_C = 0, mill_D = 0;
 int EncMA = 0, EncMB = 0, EncMC = 0, EncMD = 0;
 
@@ -49,39 +68,48 @@ struct Str {
   int left;
   int front;
   int right;
-  int button1;
-  float x;
-  float y;
-  float z;
+  int turnLeft;
+  int turnRight;
+  bool button1;
+  bool button_left;
+  bool button_right;
+  byte cameraLeft;
+  byte cameraRight;
+//  float x;
+//  float y;
+//  float z;
 };
-int left_wall;
-int front_wall;
-int right_wall;
-int button1;
+int left_wall, front_wall, right_wall, left2, right2, button_left, button_right;
 float x;
 float y;
 float z;
-bool a = true, activate = false;
+bool a = true, activate = false, button1 = false;
 float errP, errI;
-float alpha = 0;
-int state = 0, distance = 30;
-long timer = millis(), old_timer = 0;
-float diam = d / 10;
+float alpha = 0 , distance = 30.5;
+byte cameraLeft, cameraRight;
+int state = 0, angle = 90, help = 0, cam_state = 1;
+long timer = millis(), old_timer = 0; //11 - определение жертвы 10 - 1 набор 01 - 2 набора
 //while ((abs(motorA.encoder()) + abs(motorB.encoder()) + abs(motorC.encoder()) + abs(motorD.encoder())) / 4 < 360 / (diam * 3.14) * distance)
 void loop() {
   Str buf;
   timer = millis();
-  Serial.println(z);
+  Serial.println(button_right);
   if (Serial2.readBytes((byte*)&buf, sizeof(buf))) {
     left_wall = buf.left;
     front_wall = buf.front;
     right_wall = buf.right;
+    left2 = buf.turnLeft;
+    right2 = buf.turnRight;
     button1 = buf.button1;
-    x = buf.x;
-    y = buf.y;
-    z = buf.z;
+    button_left = buf.button_left;
+    button_right = buf.button_right;
+    cameraLeft = buf.cameraLeft;
+    cameraRight = buf.cameraRight;
+    //x = buf.x;
+    //y = buf.y;
+    //z = buf.z;
   }
-  if (button1 == 1 && old_timer + 200 < timer)
+  if (button1 == true && old_timer + 200 < timer)
   {
     if (activate)
     {
@@ -89,74 +117,19 @@ void loop() {
     }
     else
     {
-      activate = true; 
+      activate = true;
     }
     old_timer = millis();
   }
   if (activate)
   {
-    if (state == 0)
+    switch (state)
     {
-      if (!right_wall)
-      {
-        alpha = alpha + 15;
-        state = 2;
-      }
-      else
-      {
-        if (!front_wall)
-        {
-          clearAllEnc();
-          state = 3;
-        }
-        else
-        {
-          alpha = alpha - 4;
-          state = 1;
-        }
-      }
-    }
-    if (state == 1)
-    {
-      left();
-      if (abs(alpha) <= abs(z))
-      {
-        motorA.justSpeed(0);
-        motorB.justSpeed(0);
-        motorC.justSpeed(0);
-        motorD.justSpeed(0);
-        state = 0;
-        errI = 0;
-        delay(200);
-      }
-    }
-    if (state == 2)
-    {
-      right();
-      if (abs(alpha) <= abs(z))
-      {
-        motorA.justSpeed(0);
-        motorB.justSpeed(0);
-        motorC.justSpeed(0);
-        motorD.justSpeed(0);
-        clearAllEnc();
-        state = 3;
-        errI = 0;
-        delay(200);
-      }
-    }
-    if (state == 3)
-    {
-      forward(30);
-      if ((abs(motorA.encoder()) + abs(motorB.encoder()) + abs(motorC.encoder()) + abs(motorD.encoder())) / 4 > 360 / (7.7 * 3.141592) * distance)
-      {
-        motorA.justSpeed(0);
-        motorB.justSpeed(0);
-        motorC.justSpeed(0);
-        motorD.justSpeed(0);
-        state = 0;
-        delay(200);
-      }
+      case 0 : brain(); break;
+      case 1: turn_left(); break;
+      case 2: turn_right(); break;
+      case 3: move_forward(); break;
+      case 4: back_move();
     }
   }
   delay(5);
