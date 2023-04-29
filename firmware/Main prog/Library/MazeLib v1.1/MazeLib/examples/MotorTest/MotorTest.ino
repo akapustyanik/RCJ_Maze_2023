@@ -1,8 +1,9 @@
 #include "MazeLib.h"
 
-int myTimer = 0, bool Flag = 0;
+int myTimer = 0;
+bool Flag = 0;
 //m1a, m1b, m2a, m2b, m3a, m3b, m4a, m4b, номера прерываний A, B, C, D, пин энкодера A, B, C, D, пин копирования шима, кол-во об/мин мотора, коэф упр. воздействия, кол-во энкодеров за оборот
-MOTORS motors(4, 5, 6, 7, 9, 8, 11, 10, 0, 1, 2, 3, 57, 56, 54, 55, 10, 170, 1, 370);
+MOTORS motors(4, 5, 6, 7, 9, 8, 11, 10, 5, 4, 0, 1, 57, 56, 54, 55, 10, 170, 1, 370);
 
 void setup() {
   Serial.begin(115200);
@@ -50,10 +51,10 @@ void loop() {
   }
   else {
     //управление каждым мотором в отдельности - шим от -255 до 255
-    setA(100);
-    setB(150);
-    setC(200);
-    setD(250);
+    motors.setA(100);
+    motors.setB(150);
+    motors.setC(200);
+    motors.setD(250);
   }
   delay(10);
 }
