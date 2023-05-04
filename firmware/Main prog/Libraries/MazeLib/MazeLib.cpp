@@ -235,53 +235,53 @@ MOTORS::MOTORS() {
   _APS_max = 660.0;
   _k = 2.0;
 
-  _m1aPin = m1a;
-  _m1a = digitalPinToPort(m1a);
+  _m1aPin = 5;
+  _m1bPin = 4;
+  _m2aPin = 7;
+  _m2bPin = 6;
+  _m3aPin = 10;
+  _m3bPin = 11;
+  _m4aPin = 8;
+  _m4bPin = 9;
+  _m1a = digitalPinToPort(_m1aPin);
   _outM1a = portOutputRegister(_m1a);
-  _bitMaskM1a = digitalPinToBitMask(m1a);
-  _m1aTimerPWM = digitalPinToTimer(m1a);
+  _bitMaskM1a = digitalPinToBitMask(_m1aPin);
+  _m1aTimerPWM = digitalPinToTimer(_m1aPin);
 
-  _m1bPin = m1b;
-  _m1b = digitalPinToPort(m1b);
+  _m1b = digitalPinToPort(_m1bPin);
   _outM1b = portOutputRegister(_m1b);
-  _bitMaskM1b = digitalPinToBitMask(m1b);
-  _m1bTimerPWM = digitalPinToTimer(m1b);
+  _bitMaskM1b = digitalPinToBitMask(_m1bPin);
+  _m1bTimerPWM = digitalPinToTimer(_m1bPin);
 
-  _m2aPin = m2a;
-  _m2a = digitalPinToPort(m2a);
+  _m2a = digitalPinToPort(_m2aPin);
   _outM2a = portOutputRegister(_m2a);
-  _bitMaskM2a = digitalPinToBitMask(m2a);
-  _m2aTimerPWM = digitalPinToTimer(m2a);
+  _bitMaskM2a = digitalPinToBitMask(_m2aPin);
+  _m2aTimerPWM = digitalPinToTimer(_m2aPin);
 
-  _m2bPin = m2b;
-  _m2b = digitalPinToPort(m2b);
+  _m2b = digitalPinToPort(_m2bPin);
   _outM2b = portOutputRegister(_m2b);
-  _bitMaskM2b = digitalPinToBitMask(m2b);
-  _m2bTimerPWM = digitalPinToTimer(m2b);
+  _bitMaskM2b = digitalPinToBitMask(_m2bPin);
+  _m2bTimerPWM = digitalPinToTimer(_m2bPin);
 
-  _m3aPin = m3a;
-  _m3a = digitalPinToPort(m3a);
+  _m3a = digitalPinToPort(_m3aPin);
   _outM3a = portOutputRegister(_m3a);
-  _bitMaskM3a = digitalPinToBitMask(m3a);
-  _m3aTimerPWM = digitalPinToTimer(m3a);
+  _bitMaskM3a = digitalPinToBitMask(_m3aPin);
+  _m3aTimerPWM = digitalPinToTimer(_m3aPin);
 
-  _m3bPin = m3b;
-  _m3b = digitalPinToPort(m3b);
+  _m3b = digitalPinToPort(_m3bPin);
   _outM3b = portOutputRegister(_m3b);
-  _bitMaskM3b = digitalPinToBitMask(m3b);
-  _m3bTimerPWM = digitalPinToTimer(m3b);
+  _bitMaskM3b = digitalPinToBitMask(_m3bPin);
+  _m3bTimerPWM = digitalPinToTimer(_m3bPin);
 
-  _m4aPin = m4a;
-  _m4a = digitalPinToPort(m4a);
+  _m4a = digitalPinToPort(_m4aPin);
   _outM4a = portOutputRegister(_m4a);
-  _bitMaskM4a = digitalPinToBitMask(m4a);
-  _m4aTimerPWM = digitalPinToTimer(m4a);
+  _bitMaskM4a = digitalPinToBitMask(_m4aPin);
+  _m4aTimerPWM = digitalPinToTimer(_m4aPin);
 
-  _m4bPin = m4b;
-  _m4b = digitalPinToPort(m4b);
+  _m4b = digitalPinToPort(_m4bPin);
   _outM4b = portOutputRegister(_m4b);
-  _bitMaskM4b = digitalPinToBitMask(m4b);
-  _m4bTimerPWM = digitalPinToTimer(m4b);
+  _bitMaskM4b = digitalPinToBitMask(_m4bPin);
+  _m4bTimerPWM = digitalPinToTimer(_m4bPin);
 
   pinMode(_m1aPin, OUTPUT);
   pinMode(_m1bPin, OUTPUT);
@@ -683,14 +683,14 @@ void MOTORS::set(int16_t pwmA, int16_t pwmB, int16_t pwmC, int16_t pwmD)
     }
   }
   else {
-    analogWrite(m1a, max(pwmA, 0));
-    analogWrite(m1b, sgn(pwmA) * min(pwmA, 0));
-    analogWrite(m2a, max(pwmB, 0));
-    analogWrite(m2b, sgn(pwmB) * min(pwmB, 0));
-    analogWrite(m3a, max(pwmC, 0));
-    analogWrite(m3b, sgn(pwmC) * min(pwmC, 0));
-    analogWrite(m4a, max(pwmD, 0));
-    analogWrite(m4b, sgn(pwmD) * min(pwmD, 0));
+    analogWrite(_m1aPin, max(pwmA, 0));
+    analogWrite(_m1bPin, sgn(pwmA) * min(pwmA, 0));
+    analogWrite(_m2aPin, max(pwmB, 0));
+    analogWrite(_m2bPin, sgn(pwmB) * min(pwmB, 0));
+    analogWrite(_m3aPin, max(pwmC, 0));
+    analogWrite(_m3bPin, sgn(pwmC) * min(pwmC, 0));
+    analogWrite(_m4aPin, max(pwmD, 0));
+    analogWrite(_m4bPin, sgn(pwmD) * min(pwmD, 0));
   }
 }
 //return motors encoders trough the function
