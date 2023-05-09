@@ -694,7 +694,7 @@ void MOTORS::set(int16_t pwmA, int16_t pwmB, int16_t pwmC, int16_t pwmD)
   }
 }
 //return motors encoders trough the function
-int MOTORS::encoder(uint8_t enc) {
+int32_t MOTORS::encoder(uint8_t enc) {
   switch (enc)
   {
     case 1:
@@ -829,6 +829,11 @@ void MOTORS::follow(int16_t spMA, int16_t spMB) {
   // Serial.print(_Enc2);
   // Serial.print(" ");
   // Serial.println(_Enc3);
+
+  if(abs(_fixSpeedA) <= 20) _fixSpeedA = 0;
+  if(abs(_fixSpeedB) <= 20) _fixSpeedB = 0;
+  if(abs(_fixSpeedC) <= 20) _fixSpeedC = 0;
+  if(abs(_fixSpeedD) <= 20) _fixSpeedD = 0;
 
   set(_fixSpeedA, _fixSpeedB, _fixSpeedC, _fixSpeedD);
 
