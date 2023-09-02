@@ -113,39 +113,10 @@ void MOTORS::setConst(float RPM, float k) {
   _k = k;
 }
 
-//Attach encoders pins and interrupt numbers
-void MOTORS::attachEnc(uint8_t interruptA, uint8_t interruptB, uint8_t interruptC, uint8_t interruptD, uint8_t directionPinA, uint8_t directionPinB, uint8_t directionPinC, uint8_t directionPinD) {
-  pinMode(InterruptToPin(interruptA), INPUT);
-  pinMode(InterruptToPin(interruptB), INPUT);
-  pinMode(InterruptToPin(interruptC), INPUT);
-  pinMode(InterruptToPin(interruptD), INPUT);
-  pinMode(directionPinA, INPUT);
-  pinMode(directionPinB, INPUT);
-  pinMode(directionPinC, INPUT);
-  pinMode(directionPinD, INPUT);
-  
-  attachInterrupt(interruptA, _encoderA, FALLING);
-  _directionInRegA = portInputRegister(digitalPinToPort(directionPinA));
-  _directionBitMaskA = digitalPinToBitMask(directionPinA);
-
-  attachInterrupt(interruptB, _encoderB, FALLING);
-  _directionInRegB = portInputRegister(digitalPinToPort(directionPinB));
-  _directionBitMaskB = digitalPinToBitMask(directionPinB);
-
-  attachInterrupt(interruptC, _encoderC, FALLING);
-  _directionInRegC = portInputRegister(digitalPinToPort(directionPinC));
-  _directionBitMaskC = digitalPinToBitMask(directionPinC);
-
-  attachInterrupt(interruptD, _encoderD, FALLING);
-  _directionInRegD = portInputRegister(digitalPinToPort(directionPinD));
-  _directionBitMaskD = digitalPinToBitMask(directionPinD);
-}
-
 //Setup motors with user values
 MOTORS::MOTORS(uint8_t m1a, uint8_t m1b, uint8_t m2a, uint8_t m2b, uint8_t m3a, uint8_t m3b, uint8_t m4a, uint8_t m4b, uint8_t interruptA, uint8_t interruptB, uint8_t interruptC, uint8_t interruptD, uint8_t directionPinA, uint8_t directionPinB, uint8_t directionPinC, uint8_t directionPinD, float RPM, float k) {
   _APS_max = RPM / 60.0 * 360.0;
   _k = k;
-  _softwarePWM = 1;
 
   _m1aPin = m1a;
   _m1a = digitalPinToPort(m1a);
@@ -570,11 +541,13 @@ void MOTORS::set(int16_t pwmA, int16_t pwmB, int16_t pwmC, int16_t pwmD)
     }
     else if (pwmA < 0)
     {
+      _offPWM(_m1aTimerPWM);
       _onPWM(_m1bTimerPWM, pwmA *= -1);
       *_outM1a &= ~_bitMaskM1a; //PWM A LOW
     }
     else if (pwmA > 0)
     {
+      _offPWM(_m1bTimerPWM);
       _onPWM(_m1aTimerPWM, pwmA);
       *_outM1b &= ~_bitMaskM1b; //PWM B LOW
     }
